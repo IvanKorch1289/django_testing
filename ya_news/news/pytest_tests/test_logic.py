@@ -31,9 +31,10 @@ def test_user_can_create_note(admin_client, id_news_for_args, form_data):
 @pytest.mark.django_db
 def test_user_cant_use_bad_words(admin_client, id_news_for_args):
     url = reverse('news:detail', args=id_news_for_args)
-    response = admin_client.post(url, data={'text': f'Текст {BAD_WORDS[0]}'})
-    form_error = response.context_data['form'].errors['text']
-    assert WARNING in form_error
+    for word in BAD_WORDS:
+        response = admin_client.post(url, data={'text': f'Текст {word}'})
+        form_error = response.context_data['form'].errors['text']
+        assert WARNING in form_error
 
 
 @pytest.mark.django_db
